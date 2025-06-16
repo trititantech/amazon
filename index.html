@@ -47,9 +47,13 @@
         z-index: 1000;
         transform: translateX(400px);
         transition: transform 0.3s ease;
+        opacity: 0;
+        visibility: hidden;
       }
       .download-notification.show {
         transform: translateX(0);
+        opacity: 1;
+        visibility: visible;
       }
 
       .amazon-logo::after {
